@@ -6,7 +6,7 @@ import pandas as pd
 class Factor(object):
     def __init__(self, df):
         assert df.columns == ['phi']
-        self.values = df
+        self.values = df.copy()
 
     @classmethod
     def from_scratch(cls, variables, variable_cardinalities, values=None):
@@ -50,10 +50,8 @@ def factor_marginalization(factor, variables):
 
 
 def observe_evidence(factor, evidence):
+    tmp = factor.values.reset_index()
     for variable, value in evidence.items():
-        tmp = factor.values.reset_index()
         if variable in tmp.columns:
             tmp.loc[tmp[variable] != value, 'phi'] = 0.
     return Factor(tmp.set_index(factor.variables))
-
-
