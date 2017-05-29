@@ -26,6 +26,9 @@ class Factor(object):
     def variable_cardinalities(self):
         return list(map(len, self.values.index.levels))
 
+    def normalize(self):
+        pass
+
 
 def factor_product(factor1, factor2):
     new_variables = set(factor1.variables).union(set(factor2.variables))
@@ -55,3 +58,9 @@ def observe_evidence(factor, evidence):
         if variable in tmp.columns:
             tmp.loc[tmp[variable] != value, 'phi'] = 0.
     return Factor(tmp.set_index(factor.variables))
+
+
+def compute_joint_distribution(factors):
+    if len(factors) == 1:
+        return factors[0]
+    return factor_product(factors[0], compute_joint_distribution(factors[1:]))
