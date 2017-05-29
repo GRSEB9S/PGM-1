@@ -27,7 +27,7 @@ class Factor(object):
         return list(map(len, self.values.index.levels))
 
     def normalize(self):
-        pass
+        self.values = self.values / self.values.sum()
 
 
 def factor_product(factor1, factor2):
